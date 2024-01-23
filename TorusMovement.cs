@@ -11,6 +11,7 @@ public class TorusMovement : MonoBehaviour
     public List<GameObject> torusList;
     // private bool listActive = true;
     public int torusCount;
+    public ParticleSystem burst;
 
     private void Start() {
         Count = 3;
@@ -26,6 +27,10 @@ public class TorusMovement : MonoBehaviour
         if (other.gameObject.CompareTag("ball")){
             gameObject.SetActive(false);
             Destroy(other.gameObject, .5f);
+
+            Quaternion newRotation = Quaternion.Euler(-90, 0, 0);
+            Instantiate(burst, transform.position, newRotation);
+            
             CheckListActive();
         } 
     }
@@ -34,6 +39,7 @@ public class TorusMovement : MonoBehaviour
             foreach(GameObject obj in torusList){
                     obj.SetActive(true);
             }
+            //invoke LevelFive
     }
     bool CheckListActive(){
         foreach(GameObject obj in torusList) {
@@ -41,7 +47,9 @@ public class TorusMovement : MonoBehaviour
                 return false;
             }
         }
-        SetActivation();
+        Invoke("SetActivation", 1);
         return true;
     }
+
+    
 }
