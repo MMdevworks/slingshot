@@ -3,31 +3,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TorusMovement : MonoBehaviour
 {
     public Text CounterText;
     public int Count;
     public List<GameObject> torusList;
-    public int torusCount;
     public ParticleSystem burst;
     public Timer timerScript;
+    public AudioPlayer audioPlayer;
     public GameObject targetAxis;
-    // public AudioClip goalSound;
-    // private AudioSource playerAudio;
-    //torus is being deactivated, so sound fx on that object will be cut- new solution: audio listener? set source on a different obj
+    public TextMeshProUGUI endText;
+    
     private void Start() {
-        // playerAudio = GetComponent<AudioSource>();
-        Count = 3;
-        torusCount = 0;
+        GameObject soundPole = GameObject.Find("Sound Pole");
+        audioPlayer = soundPole.GetComponent<AudioPlayer>();
+        
+        Count = 4;
         CounterText.text = "Level : " + Count;
 
         targetAxis = GameObject.Find("Axis");
     }
 
     void Update() {
-        if(Count == 4){
+        if(Count == 5){
             LevelFive();
+        }
+        if(Count == 6){
+            foreach(GameObject obj in torusList){
+                obj.SetActive(false);
+                Debug.Log("Count 5 -> Level 6");
+            }
+            TheEnd();
         }
     }
 
@@ -38,7 +46,7 @@ public class TorusMovement : MonoBehaviour
             Destroy(other.gameObject, .5f);
 
             timerScript.timeChanged = true;
-            // playerAudio.PlayOneShot(goalSound, 1);
+            audioPlayer.playSound();
 
             Quaternion newRotation = Quaternion.Euler(-90, 0, 0);
             Instantiate(burst, transform.position, newRotation);
@@ -51,8 +59,8 @@ public class TorusMovement : MonoBehaviour
             foreach(GameObject obj in torusList){
                     obj.SetActive(true);
             }
-            Count += 1;
             CounterText.text = "Level : " + Count;
+            Debug.Log("Set activation complete");
     }
 
     bool CheckListActive(){
@@ -60,7 +68,9 @@ public class TorusMovement : MonoBehaviour
             if(obj.activeSelf) {
                 return false;
             }
+                Debug.Log("Checsk list active = FALSE");
         }
+        Count += 1;
         Invoke("SetActivation", 1);
         return true;
     }
@@ -69,5 +79,10 @@ public class TorusMovement : MonoBehaviour
         foreach(GameObject obj in torusList){
             obj.transform.RotateAround(targetAxis.transform.position, Vector3.up, 20 * Time.deltaTime);
         }
+            Debug.Log("Level 5 function activated");
+    }
+
+    public void TheEnd(){
+        endText.gameObject.SetActive(true);
     }
 }
