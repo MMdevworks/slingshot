@@ -12,7 +12,7 @@ public class Counter : MonoBehaviour
     public float speed;
     public Vector3 startPoint = new Vector3(15, 0, 25);
     public Vector3 endPoint = new Vector3(-15, 0, 25);
-    private int Count = 0;
+    private int Count = 1;
     public float moveSpeed = 3f;
     public GameObject torus1;
     public GameObject torus2;
@@ -21,24 +21,25 @@ public class Counter : MonoBehaviour
     public ParticleSystem burst;
     public Timer timerScript;
     public float time;
-    private AudioSource playerAudio;
-    public AudioClip goalSound;
+    public AudioPlayer audioPlayer;
 
     private void Start() {
-        Count = 0;
+        // Count = 1;
         float time = timerScript.timeRemaining;
-        playerAudio = GetComponent<AudioSource>();
+
+        GameObject soundPole = GameObject.Find("Sound Pole");
+        audioPlayer = soundPole.GetComponent<AudioPlayer>();
     }
 
     void Update() {
-        if(Count == 2) {
+        if(Count == 3) {
             StartCoroutine(CountdownRoutine()); 
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        playerAudio.PlayOneShot(goalSound, 1);
+        audioPlayer.playSound();
 
         Count += 1;
         CounterText.text = "Level : " + Count;
@@ -50,11 +51,11 @@ public class Counter : MonoBehaviour
         Quaternion newRotation = Quaternion.Euler(-90, 0, 0);
         Instantiate(burst, transform.position, newRotation);
 
-        if(Count == 1 ){
-            Invoke("LevelTwo", 1);
-            // Invoke("LevelFour", 1);
+        if(Count == 2 ){
+            // Invoke("LevelTwo", 1);
+            Invoke("LevelFour", 1);
         }
-        if(Count == 3 ){
+        if(Count == 4 ){
             Invoke("LevelFour", 1);
         }
     }
