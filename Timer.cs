@@ -12,6 +12,7 @@ public class Timer : MonoBehaviour
     public TextMeshProUGUI gameOverText;
     public bool timeChanged = false;
     public Button restartButton;
+    public bool isGameActive = true;
 
     void Start() {
     }
@@ -24,13 +25,14 @@ public class Timer : MonoBehaviour
         }
 
         if (timeRemaining > 0 && timeChanged){
-            timeRemaining += 10; 
+            timeRemaining += 10; // Add the desired time
             timeText.text = "Time: " + Mathf.Floor(timeRemaining);
-            timeChanged = false; 
+            timeChanged = false; // Set timeChanged back to false
         }
 
         if (timeRemaining <= 0){
             timeText.text = "Time's up!";
+            isGameActive = false;
             GameOver();
          }     
     }
