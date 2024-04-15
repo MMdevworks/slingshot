@@ -1,7 +1,6 @@
 # About
 Use your mouse to drag the ball and use physics to score goals before time runs out.
 
-## Play
 This game is hosted on Unity Play, click below to try it out:
 
 [Play Slingshot](https://play.unity.com/mg/other/project-slingshot)
